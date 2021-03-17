@@ -80,7 +80,7 @@ isAutomata a = emptyStates a && startBelongs a && finalBelongs a
 
 ---Prove if it is and e-NFA (epsilon)
 isENFA :: FA Int -> Bool
-isENFA a = Set.isSubsetOf (movesFA) ()
+isENFA a = 
 
 
 --Reads the input into a FA
