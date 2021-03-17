@@ -58,6 +58,14 @@ getMoves :: [String] -> String
 getMoves [] = error "Empty list."
 getMoves (x:xs) = x
 
+getStart :: [String] -> String
+getStart [] = error "Empty list."
+getStart (x:xs) = myLast(pop(x:xs))
+
+getFinal :: [String] -> String
+getFinal [] = error "Empty list."
+getFinal (x:xs) = myLast(x:xs)
+
 
 
 
@@ -66,7 +74,7 @@ getMoves (x:xs) = x
 --Reads the input
 main :: IO ()
 main = do  
-   let file = "FA1.txt"
+   let file = "FA3.txt"
    contents <- readFile file 
    let separados = pop(groupBy contents '\r' [])
    print(getMovesAux(separados))
