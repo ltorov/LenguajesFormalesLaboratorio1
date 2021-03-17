@@ -33,15 +33,17 @@ groupBy (x:xs) c r
     | x == c        = r : groupBy xs c ""
     | otherwise     = groupBy xs c (r ++ [x])
 
--- Extract the last element of a list, which must be finite and 
--- non-empty. The function generates an error if the list is empty.
+-- Auxiliary functions:
+
+--Extract the last element of a list, which must be finite and non-empty. The function generates an error if the list is empty.
 myLast :: [a] -> a
 myLast [] = error "Empty list."
 myLast [x] = x
 myLast (x : xs) = myLast xs
 
+--Removes the last element from a list.
 pop :: [a] -> [a]
-pop [] = []
+pop [] = error "Empty list."
 pop xs = init xs
 
 --Function to get the states of the possible FA from the input
@@ -49,7 +51,7 @@ getStates :: [String] -> String
 getStates [] = error "Empty list."
 getStates (x:xs) = myLast (groupBy x ' ' [])
 
--- 
+--Function to get the transitions of the possible FA from the input
 getMovesAux :: [String] -> [String]
 getMovesAux [] = error "Empty list."
 getMovesAux (x:y:xs) = pop(pop(y:xs))
@@ -58,17 +60,15 @@ getMoves :: [String] -> String
 getMoves [] = error "Empty list."
 getMoves (x:xs) = x
 
+--Function to get the start state of the possible FA from the input
 getStart :: [String] -> String
 getStart [] = error "Empty list."
 getStart (x:xs) = myLast(pop(x:xs))
 
+--Function to get the final states of the possible FA from the input
 getFinal :: [String] -> String
 getFinal [] = error "Empty list."
 getFinal (x:xs) = myLast(x:xs)
-
-
-
-
 
 
 --Reads the input
