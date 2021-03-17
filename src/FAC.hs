@@ -2,6 +2,7 @@ import System.IO --Para leer y escribir archivos
 import Data.Typeable
 import Data.List ( nub )
 import Data.Set ( Set )
+import Text.Read (readMaybe)
 import qualified Data.Set as Set
 
 -- | Moves (or transitions) data type.
@@ -46,38 +47,21 @@ pop :: [a] -> [a]
 pop [] = error "Empty list."
 pop xs = init xs
 
---Function to get the states of the possible FA from the input
-getStates :: [String] -> String
-getStates [] = error "Empty list."
-getStates (x:xs) = myLast (groupBy x ' ' [])
+--String to list
+stringToList :: String -> [String]
+stringToList [] = []
+stringToList a = groupBy a ',' []
 
---Function to get the transitions of the possible FA from the input
-getMovesAux :: [String] -> [String]
-getMovesAux [] = error "Empty list."
-getMovesAux (x:y:xs) = pop(pop(y:xs))
-
-getMoves :: [String] -> String
-getMoves [] = error "Empty list."
-getMoves (x:xs) = x
-
---Function to get the start state of the possible FA from the input
-getStart :: [String] -> String
-getStart [] = error "Empty list."
-getStart (x:xs) = myLast(pop(x:xs))
-
---Function to get the final states of the possible FA from the input
-getFinal :: [String] -> String
-getFinal [] = error "Empty list."
-getFinal (x:xs) = myLast(x:xs)
-
-
---Reads the input
+--Reads the input into a FA
 main :: IO ()
-main = do  
-   let file = "FA3.txt"
-   contents <- readFile file 
-   let separados = pop(groupBy contents '\r' [])
-   print(getMovesAux(separados))
+main = do 
+    input <- readFile "FA1.txt"
+    let automaton = read input :: FA Int
+
+    
+     
+    
+   
 
 
    
