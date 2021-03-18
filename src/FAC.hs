@@ -49,7 +49,7 @@ emptyStartState a = startStateFA a == "" -}
 
 --Check if start state belongs to the states
 startBelongs :: FA Int -> Bool
-startBelongs a = Set.notMember (faStartState a)  (faStates a)
+startBelongs a = Set.member (faStartState a) (faStates a)
 
 --Check if final states are a subset of the states
 finalBelongs :: FA Int -> Bool
@@ -57,24 +57,29 @@ finalBelongs a = Set.isSubsetOf (faFinalStates a) (faStates a)
 
 --Check if the states used for the transtition belong to the set of states
 --Todavia no lo quiero hacer ups perdon
+moveBelongs :: FA a -> Move a -> Bool
+moveBelongs a (Move s1 c s2) = False
+moveBelongs a (Emove s1 s2)  = Set.notMember (s1) (faStates a)
 
 --Put together all the booleans and determine if it is a finite automata
 isAutomata :: FA Int -> Bool
 isAutomata a = emptyStates a && startBelongs a && finalBelongs a
 
-
+--Check whether a move is of the type emove by pattern matching
 isEmove :: Move a -> Bool
 isEmove (Move s1 c s2) = False
 isEmove (Emove s1 s2)  = True
 
 ---Prove if it is and e-NFA (epsilon)
-isENFA :: FA Int -> Bool
-isENFA a = False
-
+isENFA :: [Move a] -> Bool
+isENFA [] = False
+isENFA [x] = isEmove x
+isENFA (x:xs) = isEmove x || isENFA xs
 
 --Reads the input into a FA
 main :: IO ()
 main = do 
-    input <- readFile "FA4.txt"
+    input <- readFile "FA2.txt"
     let automaton = read input :: FA Int
-    print(finalBelongs automaton)
+    --let movesList = Set.toList(faMoves automaton) --Para correr el isENFA
+    --print(isENFA movesList)
