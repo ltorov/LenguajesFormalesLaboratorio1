@@ -75,7 +75,7 @@ isENFA :: [Move a] -> Bool
 isENFA []     = False
 isENFA [x]    = isEmove x
 isENFA (x:xs) = isEmove x || isENFA xs
-
+{- 
 --Prove if it is an NFA 
 isNFA :: FA Int ->Bool
 isNFA a = (isENFA (Set.toList(faMoves a)) == False) && (isDFA a == False)
@@ -83,7 +83,7 @@ isNFA a = (isENFA (Set.toList(faMoves a)) == False) && (isDFA a == False)
 --Prove if it is an DFA
 --Compares if when two moves begin in the same state they have the same char
 auxIsDFA :: Move a -> Move a -> Bool
-auxIsDFA (Move s1 c1 s2) (Move s3 c2 s4) = ( s1 == is3 && c1 == c2 ) 
+auxIsDFA (Move s1 c1 s2) (Move s3 c2 s4) = ( s1 == s3 && c1 == c2 ) 
 
 --Takes list and compares every pair of two moves
 compareMoves :: [Move a] ->  Bool
@@ -95,12 +95,13 @@ compareMoves (x:y:xs)  = (auxIsDFA x y) && compareMoves (x:xs) && compareMoves (
 --
 isDFA :: FA Int -> Bool
 isDFA a = compareMoves(Set.toList(faMoves a))
-
---Reads the input into a FA
+ -}
+--Reads the input into a FA and takes the name of the file to be read as what the user inputs
 main :: IO ()
 main = do 
-    input <- readFile "FA3.txt"
+    line <- getLine
+    input <- readFile line
     let automaton = read input :: FA Int
-    print(isNFA automaton)
-    --let movesList = Set.toList(faMoves automaton) --Para correr el isENFA
-    --print(isENFA movesList)
+    print(isAutomata automaton)
+    {- let movesList = Set.toList(faMoves automaton) --Para correr el isENFA
+    print(isENFA movesList) -}
