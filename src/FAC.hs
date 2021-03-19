@@ -19,14 +19,19 @@ startBelongs a = Set.member (faStartState a) (faStates a)
 finalBelongs :: FA Int -> Bool
 finalBelongs a = Set.isSubsetOf (faFinalStates a) (faStates a)
 
-{- --Check if the states used for the transition belong to the set of states
-moveBelongs :: FA a -> Move a -> Bool
-moveBelongs a (Move s1 c s2) = Set.notMember s1 (faStates a)
-moveBelongs a (Emove s1 s2)  = Set.notMember s1 (faStates a) -}
+--Check if the states used for the transition belong to the set of states
+moveBelongsAux :: Ord a => FA a -> Move a -> Bool
+moveBelongsAux a (Move s1 c s2) = Set.member s1 (faStates a)
+moveBelongsAux a (Emove s1 s2)  = Set.member s1 (faStates a)
 
+moveBelongs :: Ord a => FA a -> [Move a] -> Bool
+moveBelongs a [] = False
+moveBelongs a [x] = moveBelongsAux a x
+moveBelongs a (x:xs) = (moveBelongs a [x]) && (moveBelongs a xs)
 --Put together all the functions above and determine if it is a finite automata
+
 isAutomata :: FA Int -> Bool
-isAutomata a = emptyStates a && startBelongs a && finalBelongs a
+isAutomata a = emptyStates a && startBelongs a && finalBelongs a && (moveBelongs a (Set.toList(faMoves a)))
 
 --FINITE AUTOMATA TYPE
 ---e-NFA
@@ -60,7 +65,7 @@ compareMoves :: Eq a => [Move a] ->  Bool
 compareMoves []        = True --si no hay movimientos, es DFA?
 compareMoves [x]       = True 
 compareMoves [x,y]     = auxIsDFA x y
-compareMoves (x:y:xs)  = (auxIsDFA x y) || compareMoves (x:xs) || compareMoves (y:xs)
+compareMoves (x:y:xs)  = compareMoves [x,y] && compareMoves (x:xs) && compareMoves (y:xs)
 
 --Check if it is a DFA
 isDFA :: FA Int -> Bool
@@ -72,6 +77,6 @@ main = do
     line <- getLine
     input <- readFile line
     let automata = read input :: FA Int
-    print(isDFA automata)
-    {- let movesList = Set.toList(faMoves automaton) --Para correr el isENFA
+    print(isAutomata automata)
+    {- let movesList = Set.toList(faMoves automata) --Para correr el isENFA
     print(isENFA movesList) -}
