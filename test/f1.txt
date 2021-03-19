@@ -1,0 +1,1 @@
+MkFA (fromList []) (fromList [Move 0 'a' 0]) 0 (fromList [0])
