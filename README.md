@@ -1,4 +1,4 @@
-# cm0081-20211-lab1
+# Laboratorio Lenguajes formales y autómatas
 Names: Gregorio Pérez Bernal and Luisa Toro Villegas
 
 Mac OS Big Sur 11.2.1
